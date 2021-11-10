@@ -446,13 +446,17 @@ ssize_t rxr_rma_post_write(struct rxr_ep *ep, struct rxr_tx_entry *tx_entry)
 		else if (!rxr_peer_support_delivery_complete(peer))
 			return -FI_EOPNOTSUPP;
 
-		max_rtm_data_size = rxr_pkt_req_max_data_size(ep,
-							      tx_entry->addr,
-							      RXR_DC_EAGER_RTW_PKT);
+		max_rtm_data_size = rxr_pkt_calc_data_size(ep,
+							   tx_entry->addr,
+							   RXR_DC_EAGER_RTW_PKT,
+							   tx_entry->fi_flags,
+							   tx_entry->rma_iov_count);
 	} else {
-		max_rtm_data_size = rxr_pkt_req_max_data_size(ep,
-							      tx_entry->addr,
-							      RXR_EAGER_RTW_PKT);
+		max_rtm_data_size = rxr_pkt_calc_data_size(ep,
+							   tx_entry->addr,
+							   RXR_EAGER_RTW_PKT,
+							   tx_entry->fi_flags,
+							   tx_entry->rma_iov_count);
 	}
 
 	/* Inter instance */
